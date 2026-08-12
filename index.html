@@ -37,6 +37,7 @@ footer{border-top:1px solid var(--line);padding:35px 24px;color:var(--muted);tex
 @media(max-width:850px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.bundles{grid-template-columns:repeat(2,1fr)}nav{display:none}}
 @media(max-width:500px){.grid,.bundles{grid-template-columns:1fr}h1{letter-spacing:-2px}}
 </style>
+<script src="https://js.paystack.co/v2/inline.js"></script>
 </head>
 <body>
 <header><div class="nav"><div class="logo">SEFAKOR <span>TEES</span></div>
@@ -79,7 +80,7 @@ function render(filter='All') {
       <div class="card-body">
         <div class="tag">${p.category}</div>
         <h3>${p.name}</h3>
-        <div class="row"><span class="price">₵150</span><button class="add" onclick="order('${p.name.replace(/'/g,"\\'")}')">Order</button></div>
+        <div class="row"><span class="price">GH₵150</span><button class="add" onclick="order('${p.name.replace(/'/g,"\\'")}')">Order</button></div>
       </div>
     </article>`).join('');
 }
@@ -89,8 +90,29 @@ categories.forEach((c,i)=>{
   filters.appendChild(b);
 });
 function order(name) {
-  const text=encodeURIComponent(`Hello Sefakor Tees, I want to order the "${name}" T-shirt. Size: L/XL/XXL. Price: ₵150.`);
-  window.open('https://wa.me/233240174171?text='+text,'_blank');
+  const email = prompt("Enter your email address to pay:");
+  if (!email) return;
+
+  const paystack = new PaystackPop();
+
+  paystack.newTransaction({
+    key: 'pk_live_81ebf8548c6d31f5f2aa599d68d04d432ad3db92',
+    email: email,
+    amount: 15000,
+    currency: 'GHS',
+
+    onSuccess: (transaction) => {
+      alert("Payment successful! Reference: " + transaction.reference);
+    },
+
+    onCancel: () => {
+      alert("Payment cancelled.");
+    },
+
+    onError: (error) => {
+      alert("Payment error: " + error.message);
+    }
+  });
 }
 render();
 </script>
