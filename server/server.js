@@ -26,6 +26,19 @@ app.post(
     const event = JSON.parse(req.body.toString());
 
     console.log("Paystack event:", event);
+    const data = event.data || {};
+const metadata = data.metadata || {};
+
+console.log("========== SEFAKOR TEES ORDER ==========");
+console.log("Payment status:", data.status);
+console.log("Order ID:", metadata.order_id);
+console.log("Product:", metadata.product_name);
+console.log("Customer email:", metadata.customer_email || data.customer?.email);
+console.log("Amount:", data.amount / 100);
+console.log("Currency:", data.currency);
+console.log("Paystack reference:", data.reference);
+console.log("Payment channel:", data.channel);
+console.log("========================================");
 
     res.sendStatus(200);
   }
