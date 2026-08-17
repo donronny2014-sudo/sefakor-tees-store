@@ -91,8 +91,8 @@ categories.forEach((c,i)=>{
 });
 function order(name) {
   const email = prompt("Enter your email address to pay:");
-  if (!email) return;
-
+   if (!email) return;
+    const orderId = "ST-" + Date.now();
   const paystack = new PaystackPop();
 
   paystack.newTransaction({
@@ -100,6 +100,23 @@ function order(name) {
     email: email,
     amount: 15000,
     currency: 'GHS',
+    metadata: {
+  order_id: orderId,
+  product_name: name,
+  customer_email: email,
+  custom_fields: [
+    {
+      display_name: "Order ID",
+      variable_name: "order_id",
+      value: orderId
+    },
+    {
+      display_name: "Product",
+      variable_name: "product_name",
+      value: name
+    }
+  ]
+},
 
     onSuccess: (transaction) => {
       alert("Payment successful! Reference: " + transaction.reference);
